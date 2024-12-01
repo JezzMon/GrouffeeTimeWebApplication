@@ -1,0 +1,169 @@
+﻿@model SoldFoodsVm
+
+@{
+    Layout = "_AdminLayout";
+}
+
+<div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Products Sold</div>
+                        @if (Model != null && Model.SoldFoods.Count() > 0)
+                        {
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <p>Total Products Sold: @Model.SoldFoods.Sum(item => item.TotalUnitSold)</p>
+                        </div>
+                        }
+                        else
+                        {
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <p>Total Products Sold: 0</p>
+                        </div>
+                        }
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Revenue</div>
+                        @if (Model != null && Model.SoldFoods.Count() > 0)
+                        {
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <p>Total Revenue: ₱@Model.SoldFoods.Sum(item => item.TotalRevenue).ToString("N2")</p>
+                        </div>
+                        }
+                        else
+                        {
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <p>Total Revenue: 0</p>
+                            </div>
+                        }
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-peso-sign fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <!-- Bar Chart -->
+    <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Chart </h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="chart-area">
+                    <!-- Canvas for Bar Chart -->
+                    <canvas id="barChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Date</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <form asp-action="Index" method="get">
+            <div class="mb-3">
+                <label for="sDate" class="form-label">Start Date</label>
+                <input type="date" class="form-control" name="sDate" />
+            </div>
+
+            <div class="mb-3">
+                <label for="eDate" class="form-label">End Date</label>
+                <input type="date" class="form-control" name="eDate" />
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="/Reports/Index" class="btn btn-secondary">Clear</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="card-footer text-center text-muted">
+        Showing Results from <strong>@Model.StartDate.ToString("dd-MMM-yyyy")</strong> to <strong>@Model.EndDate.ToString("dd-MMM-yyyy")</strong>
+    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Prepare data for the chart (Food names and Sold Units)
+    var chartLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model?.SoldFoods?.Select(item => item.FoodName).ToList()));
+
+    var chartData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model?.SoldFoods?.Select(item => item.TotalUnitSold).ToList()));
+
+    var chartRevenue = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model?.SoldFoods?.Select(item => item.TotalRevenue).ToList()));
+
+    var chartColors = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model?.SoldFoods?.Select(item => "#" + (new Random()).Next(0, 16777215).ToString("X6")).ToList()));
+
+    var ctx = document.getElementById('barChart').getContext('2d');
+    var barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartLabels,
+            datasets: [{
+                label: 'Sold',
+                data: chartData, 
+                backgroundColor: chartColors,
+                borderColor: '#ffffff',
+                borderWidth: 1
+            },{
+                label: 'Revenue',
+                data: chartRevenue,
+                backgroundColor: '#FF5733',
+                borderColor: '#ffffff',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top'
+                }
+            }
+        }
+    });
+</script>

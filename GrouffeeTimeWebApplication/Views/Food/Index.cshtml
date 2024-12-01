@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Food>
+@{
+    Layout = "_AdminLayout";
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h2 class="m-0 font-weight-bold text-primary">Food List</h2>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <main>
+                @if (Model?.Count() > 0)
+                {
+                    <table id="foodsTable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Food</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var food in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (string.IsNullOrWhiteSpace(food.Image))
+                                        {
+                                            <img src="/images/NoImage.jpg" style="width:80px;height:100px" alt="food image" />
+                                        }
+                                        else
+                                        {
+                                            <img src="/images/@food.Image" style="width:80px;height:100px" alt="food image" />
+                                        }
+                                    </td>
+                                    <td>@food.FoodName</td>
+                                    <td>@food.Description</td>
+                                    <td>@food.Category.CategoryName</td>
+                                    <td>@food.Price</td>
+                                    <td>
+                                        <a asp-action="UpdateFood" asp-controller="Food" asp-route-id="@food.Id" class="btn btn-success">Edit</a>
+                                        <a asp-action="DeleteFood" asp-controller="Food" asp-route-id="@food.Id" class="btn btn-danger" onclick="return window.confirm('Are you sure?')">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <h3>No records</h3>
+                }
+
+                <a asp-action="AddFood" asp-controller="Food" class="btn btn-primary mb-4">Add More</a>
+            </main>
+        </div>
+    </div>
+</div>
+
+
+
+        
+
+
+<!-- DataTables JS initialization -->
+@section Scripts {
+<script>
+    $(document).ready(function() {
+        $('#foodsTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "lengthMenu": [10, 25, 50, 100],
+            "pageLength": 10,
+            "language": {
+                "search": "Search Foods:",
+                "paginate": {
+                    "previous": "Previous",
+                    "next": "Next"
+                }
+            }
+        });
+    });
+</script>
+}

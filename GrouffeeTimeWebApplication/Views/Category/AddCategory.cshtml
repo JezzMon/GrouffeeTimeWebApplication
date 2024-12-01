@@ -1,0 +1,43 @@
+﻿@model CategoryDto
+@{
+    Layout = "_AdminLayout";
+}
+
+<div class="row">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h2 class="m-0 font-weight-bold text-primary">Add Category</h2>
+        </div>
+        <div class="card-body">
+            <div id="layoutSidenav">
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div style="width:100%">
+                            
+                            <form asp-action="AddCategory">
+
+                                <div class="my-2">
+                                    <label>Category</label>
+                                    <input type="text" class="form-control" asp-for="CategoryName" />
+                                    <span asp-validation-for="CategoryName" class="text-danger"></span>
+                                </div>
+
+                                <div class="my-2">
+                                    <button type="submit" class="btn btn-info">
+                                        <i class="fas fa-fw fa-plus"></i>
+                                        <span>Add</span>
+                                    </button>
+
+                                    <a asp-action="Index" asp-controller="Category" class="btn btn-primary">Back</a>
+                                </div>
+                            </form>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,67 @@
+﻿@model FoodDto
+@{
+    Layout = "_AdminLayout";
+}
+<div class="row">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h3 class="m-0 font-weight-bold text-primary">Add Food</h3>
+        </div>
+        <div class="card-body">
+            <div id="layoutSidenav">
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div style="width:100%">
+                            <form asp-action="AddFood" enctype="multipart/form-data">
+
+                                <div class="my-2">
+                                    <label>Food</label>
+                                    <input type="text" class="form-control" asp-for="FoodName" />
+                                    <span asp-validation-for="FoodName" class="text-danger"></span>
+                                </div>
+
+                                <div class="my-2">
+                                    <label>Description</label>
+                                    <input type="text" class="form-control" asp-for="Description" />
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+
+                                <div class="my-2">
+                                    <label>Category</label>
+                                    <select class="form-control" asp-for="CategoryId" asp-items="Model.CategoryList">
+                                        <option value="">Select Category</option>
+                                    </select>
+                                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                                </div>
+
+                                <div class="my-2">
+                                    <label>Price</label>
+                                    <input type="number" class="form-control" asp-for="Price" />
+                                    <span asp-validation-for="Price" class="text-danger"></span>
+                                </div>
+
+                                <div class="my-2">
+                                    <label>Image</label>
+                                    <input type="file" class="form-control" asp-for="ImageFile" />
+                                </div>
+
+                                <div class="my-2">
+                                    <a class="nav-link" asp-controller="Admin" asp-action="AllOrders">
+                                        
+                                    </a>
+                                    <button type="submit" class="btn btn-info">
+                                        <i class="fas fa-fw fa-plus"></i>
+                                        <span>Add</span>
+                                    </button>
+                                    <a asp-action="Index" asp-controller="Food" class="btn btn-primary">Back</a>
+                                </div>
+                                
+                            </form>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

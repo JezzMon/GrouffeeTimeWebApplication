@@ -1,0 +1,62 @@
+﻿@model ShoppingCart
+@{
+    ViewData["Title"] = "GetUserCart";
+}
+
+<section class="food-menu">
+    <div class="container">
+        @if (Model != null && Model.CartDetails != null && Model.CartDetails.Count > 0)
+        {
+            <h2 class="text-center">Order List</h2>
+
+            @foreach (var item in Model.CartDetails)
+            {
+                <div class="food-menu-box">
+                    <div class="food-menu-img p-4">
+                        @if (string.IsNullOrEmpty(item.Food.Image))
+                        {
+                            <img src="/images/NoImage.jpg" alt="" class="img-responsive img-curve">
+                        }
+                        else{
+                            <img src="/images/@item.Food.Image" alt="" class="img-responsive img-curve">
+                        }
+                    </div>
+
+                    <div class="food-menu-desc">
+                        <h4>@item.Food.FoodName</h4>
+                        <p class="food-price">@item.Food.Price X @item.Quantity</p>
+                        <p class="food-price">@(item.Food.Price * item.Quantity)</p>
+                        <p class="food-detail">
+                            @item.Food.Description
+                        </p>
+                        <br>
+                        @if (item.Quantity < item.Food.Stock.Quantity)
+                        {
+                            <a class="btn btn-info" href="/Cart/AddItem?foodId=@item.FoodId&&redirect=1">+</a>
+                        }
+                        else
+                        {
+                            <span class="badge badge-danger">Out of stock</span>
+                        }
+                        <a class="btn btn-danger" href="/cart/removeitem?foodid=@item.FoodId">-</a>
+                    </div>
+                </div>
+            }
+            <div class="container">
+                <div class="my-3">
+                    <h5>Total: ₱@(Model.CartDetails.Select(item => item.Food.Price * item.Quantity).Sum().ToString("0.00"))</h5>
+                </div>
+
+                <div class="my-3 text-center">
+                    <a class="btn btn-primary btn-lg" href="/Cart/Checkout">Proceed to Checkout</a>
+                </div>
+            </div>
+           
+        }
+        else
+        {
+            <h2 class="text-center">No Orders</h2>
+        }
+
+    </div>
+</section>

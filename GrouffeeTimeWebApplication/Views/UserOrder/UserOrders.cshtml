@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Order>
+@{
+}
+<div style="width:100%" class="mt-2">
+
+    <h4>Your Orders</h4>
+    @if (Model != null && Model.Count() > 0)
+    {
+        <table class="table table-striped">
+            <tr>
+                <th>OrderDate</th>
+                <th>OrderStatus</th>
+            </tr>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.CreateDate.ToString("dd-MM-yyyy")</td>
+                    <td>@order.OrderStatus.StatusName</td>
+                </tr>
+                @if (order.OrderDetail != null && order.OrderDetail.Count > 0)
+                {
+                    <tr>
+                        <td>
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        Total:
+                                    </td>
+                                    <td>
+                                        @(order.OrderDetail.Select(item => item.Food.Price * item.Quantity).Sum())
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Food</th>
+                                    <th>Image</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Total Price</th>
+                                </tr>
+                                @foreach (var item in order.OrderDetail)
+                                {
+                                    <tr>
+                                        <td>@item.Food.FoodName</td>
+                                        <td>
+                                            @if (string.IsNullOrEmpty(item.Food.Image))
+                                            {
+                                                <img src="/images/NoImage.jpg" style="width:80px;height:100px" />
+                                            }
+                                            else
+                                            {
+                                                <img src="/images/@item.Food.Image" style="width:80px;height:100px" />
+                                            }
+                                        </td>
+                                        <td>@item.Food.Category.CategoryName</td>
+                                        <td>@item.Food.Price X @item.Quantity</td>
+                                        <td>@(item.Food.Price * item.Quantity)</td>
+                                    </tr>
+                                }
+                            </table>
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    <a href="/Identity/Account/Manage" class="btn btn-primary my-2">Back</a>
+
+    }
+    else
+    {
+        <h5>No orders</h5>
+    }
+</div>
+

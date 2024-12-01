@@ -1,0 +1,65 @@
+﻿@model FoodDto
+@{
+    Layout = "_AdminLayout";
+}
+
+
+<div id="layoutSidenav">
+    <div id="layoutSidenav_content">
+        <main>
+            <div style="width:50%">
+                <h2> Update Food </h2>
+                <a asp-action="Index" asp-controller="Food" class="btn btn-primary">Back</a>
+                <form asp-action="UpdateFood" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Image" />
+
+                    <div class="my-2">
+                        <label>Food</label>
+                        <input type="text" class="form-control" asp-for="FoodName" />
+                        <span asp-validation-for="FoodName" class="text-danger"></span>
+                    </div>
+
+                    <div class="my-2">
+                        <label>Description</label>
+                        <input type="text" class="form-control" asp-for="Description" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="my-2">
+                        <label>Category</label>
+                        <select class="form-control" asp-for="CategoryId" asp-items="Model.CategoryList">
+                            <option value="">Select Category</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    </div>
+
+                    <div class="my-2">
+                        <label>Price</label>
+                        <input type="number" class="form-control" asp-for="Price" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                    <div class="my-2">
+                        <label>Image</label>
+                        @if (!string.IsNullOrEmpty(Model.Image))
+                        {
+                            <img src="/images/@Model.Image" style="width:100px;height:80px" />
+                        }
+                        else
+                        {
+                            <img src="/images/NoImage.jpg" style="width:100px;height:80px" />
+                        }
+
+                        <input type="file" class="form-control" asp-for="ImageFile" />
+                    </div>
+
+                    <div class="my-2">
+                        <button type="submit" class="btn btn-info">Update</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+

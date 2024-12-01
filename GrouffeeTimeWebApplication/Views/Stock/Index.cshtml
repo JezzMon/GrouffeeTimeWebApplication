@@ -1,0 +1,65 @@
+﻿@model IEnumerable<StockDisplayModel>
+@{
+    Layout = "_AdminLayout";
+}
+<div class="row">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h2 class="m-0 font-weight-bold text-primary">Stocks</h2>
+        </div>
+        <div class="card-body">
+            <div id="layoutSidenav">
+                <div id="layoutSidenav_content">
+                    <main>
+                        <table id="stocksTable" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Food</th>
+                                    <th>Stock</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.FoodName</td>
+                                        <td>@item.Quantity</td>
+                                        <td>
+                                            <a asp-action="ManageStock" asp-controller="Stock" asp-route-foodId="@item.FoodId" class="btn btn-info"> Update Stock</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- DataTables JS initialization -->
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#stocksTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "lengthMenu": [10, 25, 50, 100],
+                "pageLength": 10,
+                "language": {
+                    "search": "Search by Foods:",
+                    "paginate": {
+                        "previous": "Previous",
+                        "next": "Next"
+                    }
+                }
+            });
+        });
+    </script>
+}
+

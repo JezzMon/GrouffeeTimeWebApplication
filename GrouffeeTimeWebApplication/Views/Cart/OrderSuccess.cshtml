@@ -1,0 +1,10 @@
+﻿@model Order
+
+
+<div class="container mt-4">
+    <p>Your order has been placed.</p>
+
+    <a asp-action="DownloadInvoice" asp-route-orderId="@Model.Id" class="btn btn-primary">
+        Download Invoice
+    </a>
+</div>
